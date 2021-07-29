@@ -30,7 +30,7 @@ const PRODUCTS = [
     "u3",
     "The Resurrection",
     "https://images.pexels.com/photos/8800531/pexels-photo-8800531.png",
-    "The ablitity to reunited with your love ones eternally.",
+    "The ablitity to reunited with your love ones y.",
     559.99
   ),
   new Product(

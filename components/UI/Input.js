@@ -1,27 +1,33 @@
 import React, { useReducer, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
-const Input = (props) => {
-  const INPUT_CHANGE = "INPUT_CHANGE";
-  const INPUT_BLUR = "INPUT_BLUR";
+const INPUT_CHANGE = "INPUT_CHANGE";
+const INPUT_BLUR = "INPUT_BLUR";
 
-  const inputReducer = (state, action) => {
-    switch (action.type) {
-      case INPUT_CHANGE:
-        return {
-          ...state,
-          value: action.value,
-          isValid: action.isValid,
-        };
-      case INPUT_BLUR:
-        return {
-          ...state,
-          touched: true,
-        };
-      default:
-        return state;
-    }
-  };
+const inputReducer = (state, action) => {
+  switch (action.type) {
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        value: action.value,
+        isValid: action.isValid,
+      };
+    case INPUT_BLUR:
+      return {
+        ...state,
+        touched: true,
+      };
+    default:
+      return state;
+  }
+};
+
+const Input = (props) => {
+  const [inputState, dispatch] = useReducer(inputReducer, {
+    value: props.initialValue ? props.initialValue : "",
+    isValid: props.initiallyValid,
+    touched: false,
+  });
 
   const { onInputChange, id } = props;
 
@@ -30,12 +36,6 @@ const Input = (props) => {
       onInputChange(id, inputState.value, inputState.isValid);
     }
   }, [inputState, onInputChange, id]);
-
-  const [inputState, dispatch] = useReducer(inputReducer, {
-    value: props.initialValue ? props.initialValue : "",
-    isValid: props.initiallyValid,
-    touched: false,
-  });
 
   const textChangeHandler = (text) => {
     const emailRegex =
@@ -56,7 +56,7 @@ const Input = (props) => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
-    dispatch({ type: INPUT_CHANGE, value: text, isValid });
+    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
   };
 
   const lostFocusHandler = () => {
@@ -75,7 +75,7 @@ const Input = (props) => {
       />
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
-          <Text style={styles.error}>{props.errorText}</Text>
+          <Text style={styles.errorText}>{props.errorText}</Text>
         </View>
       )}
     </View>
@@ -88,8 +88,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: "title-bold",
-    fontSize: 20,
-    marginVertical: 8,
+    marginVertical: 18,
   },
   input: {
     paddingHorizontal: 2,
@@ -100,10 +99,10 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginVertical: 5,
   },
-  error: {
+  errorText: {
     fontFamily: "open-sans",
-    fontSize: 13,
     color: "red",
+    fontSize: 13,
   },
 });
 
