@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
+  Text,
   FlatList,
   Platform,
   ActivityIndicator,
@@ -34,6 +35,12 @@ const OrderScreen = (props) => {
         <ActivityIndicator size='large' color={Colors.primary} />
       </View>
     );
+  }
+
+  if(orders.length === 0){
+    return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text style={{fontFamily: 'open-sans', fontSize: 22}}> No orders found!  </Text>
+    </View>
   }
 
   return (
